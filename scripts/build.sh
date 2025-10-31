@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-BUILD_TYPE=Release
+BUILD_TYPE=Debug
 BUILD_DIR=build
 CMAKE_FLAGS=()
 
@@ -20,6 +20,8 @@ for arg in "$@";
       TEST_REQUESTED=true
     elif [ "$arg" == "-btest" ]; then
       CMAKE_FLAGS+=("-DLIBOPENSTEAMSCHEMA_BUILD_TESTS=ON")
+    elif [ "$arg" == "-release" ]; then
+      BUILD_TYPE=Release
     # elif [ "$arg" == "-covr" ]; then
     #   COVR_REQUESTED=true
     #   COVR_EXE_REQUESTED=true
