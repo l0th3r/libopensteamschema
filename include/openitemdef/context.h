@@ -1,5 +1,5 @@
-#ifndef OSS_CONTEXT_H
-#define OSS_CONTEXT_H
+#ifndef OID_CONTEXT_H
+#define OID_CONTEXT_H
 
 #ifdef __cplusplus
 extern "C" {
