@@ -1,14 +1,14 @@
-#include "opensteamschema/context.h"
+#include "openitemdef/context.h"
 #include <stdlib.h>
 
-struct oss_context_t
+struct oid_context_t
 {
     int* data;
 };
 
-oss_context_t* oss_create_context(void)
+oid_context_t* oid_create_context(void)
 {
-    oss_context_t* ctx = (oss_context_t*) malloc(sizeof(oss_context_t));
+    oid_context_t* ctx = (oid_context_t*) malloc(sizeof(oid_context_t));
 
     if(ctx == NULL)
     {
@@ -22,7 +22,7 @@ oss_context_t* oss_create_context(void)
     }
 }
 
-void oss_free_context(oss_context_t* ctx)
+void oid_free_context(oid_context_t* ctx)
 {
     if (ctx == NULL)
     {

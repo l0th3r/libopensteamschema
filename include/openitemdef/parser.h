@@ -1,7 +1,7 @@
-#ifndef OSS_PARSER_H
-#define OSS_PARSER_H
+#ifndef OID_PARSER_H
+#define OID_PARSER_H
 
-#include "opensteamschema/context.h"
+#include "openitemdef/context.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,7 +18,7 @@ extern "C" {
  * @param file_path Path to the JSON file to load.
  * @return 0 on success, non-zero value if the file cannot be read or parsed.
  */
-int oss_load_schema(oss_context_t* context, const char* file_path);
+int oid_load_schema(oid_context_t* context, const char* file_path);
 
 #ifdef __cplusplus
 }

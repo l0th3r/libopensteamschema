@@ -12,7 +12,7 @@ foreach(TEST_FILE ${TEST_SOURCES})
 
     target_link_libraries(${TEST_NAME} PRIVATE
         unity
-        opensteamschema)
+        openitemdef)
 
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endforeach()
