@@ -23,7 +23,11 @@ extern "C" {
 */
 
 /**
- * @brief Represents a string key–value pair (for arbitrary properties).
+ * @brief Represents a string key–value pair.
+ * 
+ * @note Used for dynamic properties:
+ *  https://partner.steamgames.com/doc/features/inventory/dynamicproperties
+ * 
  */
 typedef struct oid_kv_t
 {
@@ -34,8 +38,9 @@ typedef struct oid_kv_t
 /**
  * @brief Represents an item identifier with an associated quantity.
  *
- * Used in bundles, exchange recipes, and other contexts where a fixed
+ * @note Used in bundles, exchange recipes, and other contexts where a fixed
  * number of a given itemdefid is required.
+ * 
  */
 typedef struct oid_amount_t
 {
@@ -46,7 +51,8 @@ typedef struct oid_amount_t
 /**
  * @brief Represents an item identifier with a probability weight.
  *
- * Used in generators and playtimegenerators to express drop chances.
+ * @note Used in generators and playtimegenerators to express drop chances.
+ * 
  */
 typedef struct oid_weight_t
 {
@@ -57,7 +63,8 @@ typedef struct oid_weight_t
 /**
  * @brief Represents a simple dynamic list of strings.
  *
- * Useful for fields like tags, store_tags, or language-specific names.
+ * @note Useful for fields like tags, store_tags, or language-specific names.
+ * 
  */
 typedef struct oid_strlist_t
 {
@@ -69,10 +76,10 @@ typedef struct oid_strlist_t
 /* ITEMDEF */
 typedef struct oid_itemdef_t
 {
-    int itemdefid;          /* unique Steam ID */
-    char* type;             /* "item", "bundle", "generator", etc. */
-    char* name;             /* base name (unlocalized) */
-    char* description;      /* optional description */
+    int itemdefid;
+    char* type;
+    char* name;
+    char* description;
 
     int tradable;
     int marketable;
@@ -83,14 +90,14 @@ typedef struct oid_itemdef_t
     char* background_color;
     char* name_color;
 
-    oid_strlist_t tags;         /* item tags */
-    oid_strlist_t store_tags;   /* store categories */
+    oid_strlist_t tags;
+    oid_strlist_t store_tags;
 
     /* optional Steam fields */
-    char* bundle;           /* raw bundle string if present */
-    char* exchange;         /* raw exchange string if present */
-    char* promo;            /* raw promo rule */
-    char* price;            /* explicit price list */
+    char* bundle;
+    char* exchange;
+    char* promo;
+    char* price;
     char* price_category;
 
     /* free-form metadata */
@@ -101,26 +108,26 @@ typedef struct oid_itemdef_t
 /* BUNDLE */
 typedef struct oid_bundle_t
 {
-    int itemdefid;            /* bundle’s own id */
-    oid_amount_t* entries;    /* contained items */
+    int itemdefid;
+    oid_amount_t* entries;
     size_t entry_count;
 } oid_bundle_t;
 
 /* GENERATOR */
 typedef struct oid_generator_t
 {
-    int itemdefid;            /* generator id */
-    oid_weight_t* entries;    /* possible drops */
+    int itemdefid;
+    oid_weight_t* entries;
     size_t entry_count;
 } oid_generator_t;
 
 /* PLAYTIME GENERATOR */
 typedef struct oid_playtime_generator_t {
     int itemdefid;
-    int generator_id;         /* linked generator */
-    int drop_interval;        /* minutes between grants */
-    int drop_window;          /* cooldown window in minutes */
-    int drop_max_per_window;  /* max per window */
+    int generator_id;
+    int drop_interval;
+    int drop_window;
+    int drop_max_per_window;
     int use_drop_window;
     int use_drop_limit;
     int drop_limit;
@@ -135,6 +142,40 @@ typedef struct oid_exchange_t {
     oid_amount_t* outputs;
     size_t output_count;
 } oid_exchange_t;
+
+
+/* Steam Localization
+ *  https://partner.steamgames.com/doc/store/localization/languages */
+static const char* OID_LANG_API_ARABIC      = "arabic";
+static const char* OID_LANG_API_BULGARIAN   = "bulgarian";
+static const char* OID_LANG_API_SCHINESE    = "schinese";
+static const char* OID_LANG_API_TCHINESE    = "tchinese";
+static const char* OID_LANG_API_CZECH       = "czech";
+static const char* OID_LANG_API_DANISH      = "danish";
+static const char* OID_LANG_API_DUTCH       = "dutch";
+static const char* OID_LANG_API_ENGLISH     = "english";
+static const char* OID_LANG_API_FINNISH     = "finnish";
+static const char* OID_LANG_API_FRENCH      = "french";
+static const char* OID_LANG_API_GERMAN      = "german";
+static const char* OID_LANG_API_GREEK       = "greek";
+static const char* OID_LANG_API_HUNGARIAN   = "hungarian";
+static const char* OID_LANG_API_INDONESIAN  = "indonesian";
+static const char* OID_LANG_API_ITALIAN     = "italian";
+static const char* OID_LANG_API_JAPANESE    = "japanese";
+static const char* OID_LANG_API_KOREAN      = "koreana";
+static const char* OID_LANG_API_NORWEGIAN   = "norwegian";
+static const char* OID_LANG_API_POLISH      = "polish";
+static const char* OID_LANG_API_PORTUGUESE  = "portuguese";
+static const char* OID_LANG_API_BRAZILIAN   = "brazilian";
+static const char* OID_LANG_API_ROMANIAN    = "romanian";
+static const char* OID_LANG_API_RUSSIAN     = "russian";
+static const char* OID_LANG_API_SPANISH     = "spanish";
+static const char* OID_LANG_API_LATAM       = "latam";
+static const char* OID_LANG_API_SWEDISH     = "swedish";
+static const char* OID_LANG_API_THAI        = "thai";
+static const char* OID_LANG_API_TURKISH     = "turkish";
+static const char* OID_LANG_API_UKRAINIAN   = "ukrainian";
+static const char* OID_LANG_API_VIETNAMESE  = "vietnamese";
 
 #ifdef __cplusplus
 }
