@@ -31,15 +31,43 @@ void test_oid_load_schema_invalid_file(void)
 
 void test_oid_load_schema_valid_file(void)
 {
-    oid_context_t* ctx = oid_create_context();
     FILE* f = fopen("valid.json", "w");
     fputs("{\"key\":\"value\"}", f);
     fclose(f);
 
-    TEST_ASSERT_EQUAL_INT(0, oid_load_schema(ctx, "valid.json"));
+    TEST_ASSERT_EQUAL_INT(0, oid_load_schema(context, "valid.json"));
 
     remove("valid.json");
-    oid_free_context(ctx);
+}
+
+void test_oid_load_schema_valid_file_invalid_JSON(void)
+{
+    FILE* f = fopen("invalid_content.json", "w");
+    fputs("{\n\"key\":\"value\n}", f);
+    fclose(f);
+
+    int result = oid_load_schema(context, "invalid_content.json");
+    const json_error_t* err = oid_get_last_json_err(context);
+
+    TEST_ASSERT_NOT_EQUAL_INT(0, result);
+    TEST_ASSERT_NOT_EQUAL_INT(0, json_error_code(err));
+    
+    remove("invalid_content.json");
+}
+
+void test_oid_allocated_item_data(void)
+{
+    // First allocation
+    int res = oid_alloc_item_def(context, 3);
+    TEST_ASSERT_EQUAL_INT(0, res); /* Check no err code */
+    TEST_ASSERT_EQUAL_INT(3, oid_get_item_def_capacity(context)); /* Check updated capacity */
+    TEST_ASSERT_EQUAL_INT(0, oid_get_item_def_size(context)); /* Check non-updated size */
+
+    // Second allocation (allocated 2 items)
+    int res2 = oid_alloc_item_def(context, 2);
+    TEST_ASSERT_EQUAL_INT(0, res2); /* Check no err code */
+    TEST_ASSERT_EQUAL_INT(5, oid_get_item_def_capacity(context)); /* Check updated capacity */
+    TEST_ASSERT_EQUAL_INT(0, oid_get_item_def_size(context)); /* Check non-updated size */
 }
 
 int main(void)
@@ -48,5 +76,7 @@ int main(void)
     RUN_TEST(test_oid_load_schema_null_args);
     RUN_TEST(test_oid_load_schema_invalid_file);
     RUN_TEST(test_oid_load_schema_valid_file);
+    RUN_TEST(test_oid_load_schema_valid_file_invalid_JSON);
+    RUN_TEST(test_oid_allocated_item_data);
     return UNITY_END();
 }
