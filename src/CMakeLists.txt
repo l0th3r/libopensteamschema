@@ -17,3 +17,7 @@ target_link_libraries(openitemdef PRIVATE ${JANSSON_LIBRARY})
 target_include_directories(openitemdef
     PUBLIC ${CMAKE_SOURCE_DIR}/include/openitemdef
 )
+
+if(OPENITEMDEF_ENABLE_COVERAGE)
+    openitemdef_enable_coverage_for(openitemdef)
+endif()
