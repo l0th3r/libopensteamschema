@@ -1,0 +1,82 @@
+name: Build CI
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential lcov
+
+      - name: Make build script executable
+        run: chmod +x ./scripts/build.sh
+
+      - name: Build modules and test targets
+        run: ./scripts/build.sh -bccov
+
+      - name: Run tests
+        run: ctest --test-dir .build --output-on-failure
+
+      - name: Run coverage
+        run: |
+          lcov --directory ./.build/ --capture --output-file ./.build/coverage.info
+          lcov --remove ./.build/coverage.info '/usr/*' '*/tests/*' -o ./.build/coverage.cleaned.info
+
+      - name: Build coverage report
+        run: genhtml ./.build/coverage.cleaned.info --output-directory ./.build/coverage-report --legend --title "openitemdef coverage"
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: .build/coverage-report/
+
+  build-docs:
+    needs: build-and-test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage
+          path: coverage-report
+      
+      - name: Prepare documentation + coverage bundle
+        run: |
+          mkdir -p build/public/coverage
+          cp -r coverage-report/* build/public/coverage/
+
+      - name: Upload coverage artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build/public
+  
+  deploy-docs:
+    needs: build-docs
+    runs-on: ubuntu-22.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
