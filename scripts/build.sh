@@ -27,6 +27,9 @@ for arg in "$@";
       CMAKE_FLAGS+=("-DOPENITEMDEF_BUILD_TESTS=ON")
       TEST_REQUESTED=true
       COVR_REQUESTED=true
+    elif [ "$arg" == "-bcov" ]; then
+      CMAKE_FLAGS+=("-DOPENITEMDEF_ENABLE_COVERAGE=ON")
+      CMAKE_FLAGS+=("-DOPENITEMDEF_BUILD_TESTS=ON")
     else
       OPT_FLAGS+="$arg"
     fi
