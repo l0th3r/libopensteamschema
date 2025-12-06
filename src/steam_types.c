@@ -4,13 +4,13 @@ oid_amount_list_t oid_amount_list_from_string(const char* text)
 {
     oid_amount_list_t list = { 0 };
 
-    if (text == NULL || *text == '\0')
+    if (!text || *text == '\0')
     {
         return list;
     }
 
     char* buffer = strdup(text);
-    if (buffer == NULL)
+    if (!buffer)
     {
         return list;
     }
@@ -18,7 +18,7 @@ oid_amount_list_t oid_amount_list_from_string(const char* text)
     size_t capacity = 8;
     list.entries = (oid_amount_t*)calloc(capacity, sizeof(oid_amount_t));
 
-    if (list.entries == NULL)
+    if (!list.entries)
     {
         free(buffer);
         return list;
@@ -67,7 +67,7 @@ oid_amount_list_t oid_amount_list_from_string(const char* text)
                     capacity *= 2;
                     oid_amount_t* resized = (oid_amount_t*)realloc(list.entries, capacity * sizeof(oid_amount_t));
 
-                    if (resized == NULL)
+                    if (!resized)
                     {
                         break;
                     }
@@ -90,7 +90,7 @@ oid_amount_list_t oid_amount_list_from_string(const char* text)
 
 char* oid_amount_list_to_string(const oid_amount_list_t* list)
 {
-    if (list == NULL || list->count == 0)
+    if (!list || list->count == 0)
     {
         return strdup("");
     }
@@ -98,7 +98,7 @@ char* oid_amount_list_to_string(const oid_amount_list_t* list)
     size_t bufsize = list->count * 16;
     char* out = (char*)malloc(bufsize);
 
-    if (out == NULL)
+    if (!out)
     {
         return NULL;
     }
@@ -131,7 +131,7 @@ char* oid_amount_list_to_string(const oid_amount_list_t* list)
 
 void oid_amount_list_free(oid_amount_list_t* list)
 {
-    if (list == NULL)
+    if (!list)
     {
         return;
     }
@@ -194,7 +194,7 @@ const oid_color_t oid_color_from_hex(const char* hex)
 {
     oid_color_t color = {0, 0, 0, 0};
     
-    if (hex == NULL || strlen(hex) != 6)
+    if (!hex || strlen(hex) != 6)
     {
         return color;
     }
@@ -221,7 +221,7 @@ const oid_color_t oid_color_from_hex(const char* hex)
 
 void oid_color_to_hex(const oid_color_t color, char* buffer)
 {
-    if (buffer == NULL)
+    if (!buffer)
     {
         return;
     }
