@@ -26,7 +26,7 @@ jobs:
         run: chmod +x ./scripts/build.sh
 
       - name: Build modules and test targets
-        run: ./scripts/build.sh -bccov
+        run: ./scripts/build.sh -bcov
 
       - name: Run tests
         run: ctest --test-dir .build --output-on-failure
